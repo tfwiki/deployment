@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blackfire
+  labels:
+    app: blackfire
+spec:
+  ports:
+    - port: 8707
+  selector:
+    app: blackfire
+---  
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: blackfire
+  labels:
+    app: blackfire
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blackfire
+    spec:
+      containers:
+      - image: blackfire/blackfire
+        name: blackfire 
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8707
+          name: blackfire
+        env:
+          - name: BLACKFIRE_SERVER_ID
+            valueFrom:
+              secretKeyRef:
+                name: blackfire-secret
+                key: blackfire.server.id
+          - name: BLACKFIRE_SERVER_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: blackfire-secret
+                key: blackfire.server.token

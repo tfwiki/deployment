@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: memcached
+  labels:
+    app: memcached
+spec:
+  clusterIP: None
+  ports:
+  - name: memcached
+    port: 11211
+    targetPort: memcached
+  selector:
+    app: memcached
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: memcached
+  labels:
+    app: memcached
+spec:
+  serviceName: memcached
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: memcached
+    spec:
+      containers:
+      - name: memcached
+        image: memcached:latest
+        imagePullPolicy: Always
+        command:
+        - memcached
+        - -m 128
+        ports:
+        - name: memcached
+          containerPort: 11211
+        livenessProbe:
+          tcpSocket:
+            port: memcached
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: memcached
+          initialDelaySeconds: 5
+          timeoutSeconds: 1

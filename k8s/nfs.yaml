@@ -66,9 +66,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    # IP of nfs-server service. GCE currently doesn't resolve from domain
-    # See https://github.com/kubernetes/kubernetes/issues/48212
-    server: 10.11.251.158
+    server: nfs-server.default.svc.cluster.local
     path: "/"
 ---
 apiVersion: v1

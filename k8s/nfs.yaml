@@ -53,7 +53,7 @@ spec:
       volumes:
         - name: mediawiki-images
           gcePersistentDisk:
-            pdName: tfwiki-development-mediawiki-images
+            pdName: tfwiki-production-mediawiki-images
             fsType: ext4
 ---
 apiVersion: v1

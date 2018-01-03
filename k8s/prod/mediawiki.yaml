@@ -17,6 +17,7 @@ spec:
         name: mediawiki 
         imagePullPolicy: Always
         readinessProbe:
+          timeoutSeconds: 5
           httpGet:
             path: /wiki/Main_Page
             port: 80

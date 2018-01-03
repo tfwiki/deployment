@@ -18,6 +18,7 @@ spec:
         imagePullPolicy: Always
         readinessProbe:
           httpGet:
+          timeoutSeconds: 5
             path: /wiki/Main_Page
             port: 80
         ports:

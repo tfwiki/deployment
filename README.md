@@ -1,13 +1,88 @@
-# Kubernetes configuration for the Team Fortress Wiki
+# TF2 Wiki Kubernetes Config
 
-## Clusters
+This repository contains the non-sensitive Kubernetes declarations powering the Team Fortress 2 Wiki.
 
-Cluster              | Location         | Machine type | Notes
--------------------- | ---------------- | ------------ | -----
-`tfwiki-production`  | `us-west1-a`     | `n1-standard-8` (8 vCPU; 30GB memory) | Machine type closest, memory-wise, to pre-Cloud infrastructure (24 core, 24GB memory). We can review & optimise once we have production performance metrics.
-`tfwiki-development` | `us-central1-a`  | `n1-standard-4` | Move to same location as production?
+Secrets and credentials are managed separately in a Blackbox repository: https://github.com/tfwiki/secrets
+
+## Existing infrastructure
+
+### Production
+
+Cluster | &nbsp;
+---- | ----
+Name | `tfwiki-production`
+Location | `us-west1-a`
+Machine type | `n1-standard-8` (8 vCPU; 30GB memory)
+Nodes | 6
+
+Machine type closest, memory-wise, to pre-Cloud infrastructure (24 core, 24GB memory). We can review & 
+optimise once we have production performance metrics.
+
+Static IP | &nbsp;
+---- | ----
+TODO | 
+
+
+Disks | &nbsp;
+---- | ----
+TODO | 
+
+
+Database | &nbsp;
+---- | ----
+TODO | 
+
+
+### Development
+
+Note: Scrap and re-build this environment from Production, once Production config is finalised.
+
+Cluster | &nbsp;
+---- | ----
+Name | `tfwiki-development`
+Location | `us-central1-a`
+Machine type | `n1-standard-4` (4 vCPU; 15GB memory)
+Nodes | 2
+
+Static IP | &nbsp;
+---- | ----
+TODO | 
+
+
+Disks | &nbsp;
+---- | ----
+TODO | 
+
+
+Database | &nbsp;
+---- | ----
+TODO | 
 
 ## Spin up new environment
+
+### Setup Cluster
+
+TODO
+
+### Setup database
+
+TODO
+### Setup storage
+
+TODO
+### Setup static IP
+
+TODO
+### Kubernetes configuration
+
+TODO
+### Launch 
+
+TODO
+
+---
+
+Rough notes:
 
 ### Prerequisites
 * Kubernetes cluster running 1.8.x (to avoid hardcoding NFS Service IP in PersistantVolume declaration)

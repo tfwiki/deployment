@@ -9,6 +9,14 @@ Cluster              | Location         | Machine type | Notes
 
 ## Spin up new environment
 
+### Prerequisites
+* Kubernetes cluster running 1.8.x (to avoid hardcoding NFS Service IP in PersistantVolume declaration)
+* Cloud SQL database `cloudsql-instance-credentials` https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine
+* Persistant disk for mediawiki images (mounted via NFS)
+* Global Static IP address
+
+### Task list
+
 1. Create cluster in Google Container Engine
 2. Work on correct zone (`gcloud config set compute/zone [COMPUTE-ZONE]`)
 3. Log into new cluster (`gcloud container clusters get-credentials [CLUSTER-NAME]`)
@@ -18,8 +26,3 @@ Cluster              | Location         | Machine type | Notes
 7. Update `[nfs.yaml](k8s/nfs.yaml)`'s `spec.template.spec.volumes.gcePersistentDisk` (TODO: Generalise?)
 8. Update Google Cloud proxy command in `[mediawiki.yaml](k8s/mediawiki.yaml)` (TODO: Generalise?)
 9. Spin up! `kubectl apply -f k8s`
-
-### TODO: 
-* `cloudsql-instance-credentials` (TODO: https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine)
-* create `tfwiki-production-mediawiki-images` disk
-* Copy pre-Cloud infrastructure media to the above disk

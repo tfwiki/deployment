@@ -13,7 +13,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.0-beta2
+      - image: tfwiki/mediawiki:1.0.0-beta3
         name: mediawiki 
         readinessProbe:
           httpGet:

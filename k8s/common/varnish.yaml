@@ -25,8 +25,7 @@ spec:
     spec:
       containers:
       - name: varnish
-        image: tfwiki/varnish:latest
-        imagePullPolicy: Always
+        image: tfwiki/varnish:1.0.0
         readinessProbe:
           httpGet:
             path: /wiki/Main_Page

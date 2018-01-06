@@ -1,14 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: dev-ingress
+  name: prod-ingress
   annotations:
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.global-static-ip-name: tfwiki-production-static-ip
     kubernetes.io/tls-acme: "true"
 spec:
   tls:
-  - secretName: dev-tls
+  - secretName: prod-tls
     hosts:
     - prod.wiki.tf
   backend:

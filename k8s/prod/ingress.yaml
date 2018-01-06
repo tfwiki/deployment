@@ -13,4 +13,4 @@ spec:
     - prod.wiki.tf
   backend:
     serviceName: varnish
-    servicePort: 80
+    servicePort: varnish

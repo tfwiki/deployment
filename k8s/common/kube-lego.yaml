@@ -4,6 +4,69 @@ metadata:
   name: kube-lego
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: kube-lego
+  name: kube-lego
+  namespace: kube-lego
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  labels:
+    app: kube-lego
+  name: kube-lego
+  namespace: kube-lego
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - get
+  - delete
+  - update
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - update
+  - create
+  - list
+  - patch
+  - delete
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - endpoints
+  - secrets
+  verbs:
+  - get
+  - create
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app: kube-lego
+  name: kube-lego
+  namespace: kube-lego
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-lego
+subjects:
+  - kind: ServiceAccount
+    name: kube-lego
+    namespace: kube-lego
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: kube-lego
@@ -25,6 +88,7 @@ spec:
         # Required for the auto-create kube-lego-nginx service to work.
         app: kube-lego
     spec:
+      serviceAccountName: kube-lego
       containers:
       - name: kube-lego
         image: jetstack/kube-lego:0.1.5

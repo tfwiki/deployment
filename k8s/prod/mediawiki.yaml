@@ -13,7 +13,8 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.0-beta4
+      - image: tfwiki/mediawiki:1.0.0
+        imagePullPolicy: Always
         name: mediawiki
         readinessProbe:
           timeoutSeconds: 5

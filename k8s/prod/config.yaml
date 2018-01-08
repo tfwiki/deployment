@@ -5,6 +5,6 @@ metadata:
 data:
   memcached_host: memcached
   server_url: https://prod.wiki.tf
-  sitename: (Production) Team Fortress Wiki
+  sitename: Team Fortress Wiki
   varnish_host: all-varnish
   blackfire_socket: tcp://blackfire:8707

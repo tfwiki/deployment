@@ -6,7 +6,10 @@ metadata:
     app: mediawiki
 spec:
   ports:
-    - port: 80
+    - name: mediawiki
+      port: 80
+      targetPort: mediawiki
+  selector:
   selector:
     app: mediawiki
     tier: frontend

@@ -31,7 +31,7 @@ metadata:
   labels:
     app: varnish
 spec:  
-  replicas: 6
+  replicas: 4
   template:
     metadata:
       name: varnish
@@ -52,17 +52,3 @@ spec:
         ports:
         - name: varnish
           containerPort: 80
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: varnish
-  namespace: default
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1beta1
-    kind: Deployment
-    name: varnish
-  minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80

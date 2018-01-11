@@ -101,3 +101,8 @@ Rough notes:
 7. Update [`nfs.yaml`](k8s/prod/nfs.yaml)'s `spec.template.spec.volumes.gcePersistentDisk` (TODO: Generalise?)
 8. Update Google Cloud proxy command in [`mediawiki.yaml`](k8s/prod/mediawiki.yaml) (TODO: Generalise?)
 9. Spin up! `kubectl apply -f k8s/common;kubectl apply -f k8s/ENVIRONMENT`
+
+Sync files from pre-Cloud wiki:
+
+1. `kubectl create secret generic media-sync-secret --from-file=ssh-privatekey=/path/to/.ssh/id_rsa --from-file=ssh-publickey=/path/to/.ssh/id_rsa.pub`
+2. Run jobbo

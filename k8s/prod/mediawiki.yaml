@@ -158,28 +158,7 @@ spec:
         volumeMounts:
           - name: mediawiki-images
             mountPath: /var/www/html/w/images
-      - image: gcr.io/cloudsql-docker/gce-proxy:1.11
-        name: cloudsql-proxy
-        command: ["/cloud_sql_proxy", "--dir=/cloudsql",
-                  "-instances=tfwiki-182108:us-west1:tfwiki-production=tcp:3306",
-                  "-credential_file=/secrets/cloudsql/credentials.json"]
-        volumeMounts:
-          - name: cloudsql-instance-credentials
-            mountPath: /secrets/cloudsql
-            readOnly: true
-          - name: ssl-certs
-            mountPath: /etc/ssl/certs
-          - name: cloudsql
-            mountPath: /cloudsql
       volumes:
-        - name: cloudsql-instance-credentials
-          secret:
-            secretName: cloudsql-instance-credentials
-        - name: ssl-certs
-          hostPath:
-            path: /etc/ssl/certs
-        - name: cloudsql
-          emptyDir:
         - name: mediawiki-images
           persistentVolumeClaim:
             claimName: nfs

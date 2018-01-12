@@ -10,7 +10,6 @@ spec:
       port: 80
       targetPort: mediawiki
   selector:
-  selector:
     app: mediawiki
     tier: frontend
   type: NodePort

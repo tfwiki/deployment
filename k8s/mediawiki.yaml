@@ -14,6 +14,20 @@ spec:
     tier: frontend
   type: NodePort
 ---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mediawiki
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: mediawiki
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:

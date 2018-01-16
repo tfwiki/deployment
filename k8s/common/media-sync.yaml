@@ -1,0 +1,57 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: media-sync
+spec:
+  schedule: "*/30 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 4
+      template:
+        spec:
+          containers:
+          - name: media-sync
+            image: instrumentisto/rsync-ssh@sha256:c60f91c57a43e6c79c7de4962dc836a3830bb7dc113f6c0cbba05af2774dcaf7
+            command: ["sh", "-c", "rsync -av --delete -e \"ssh -i /etc/media-sync-secrets/ssh-privatekey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${FROM_PORT} -A -t ${FROM_USER}@${FROM_HOST}\" ${FROM_PATH} ${TO_PATH}"]
+            env:
+              - name: FROM_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: media-sync-config
+                    key: from.host
+              - name: FROM_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: media-sync-config
+                    key: from.port
+              - name: FROM_USER
+                valueFrom:
+                  configMapKeyRef:
+                    name: media-sync-config
+                    key: from.user
+              - name: FROM_PATH
+                valueFrom:
+                  configMapKeyRef:
+                    name: media-sync-config
+                    key: from.path
+              - name: TO_PATH
+                valueFrom:
+                  configMapKeyRef:
+                    name: media-sync-config
+                    key: to.path
+            volumeMounts:
+            - name: media-sync-secrets
+              readOnly: true
+              mountPath: "/etc/media-sync-secrets"
+            - name: mediawiki-images
+              mountPath: /var/www/html/w/images
+          volumes:
+          - name: mediawiki-images
+            persistentVolumeClaim:
+              claimName: nfs
+          - name: media-sync-secrets
+            secret:
+              secretName: media-sync-secrets
+              defaultMode: 0600
+          restartPolicy: Never

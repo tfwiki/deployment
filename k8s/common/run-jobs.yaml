@@ -1,42 +1,21 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: mediawiki
-  labels:
-    app: mediawiki
-spec:
-  ports:
-    - port: 80
-  selector:
-    app: mediawiki
-    tier: frontend
-  type: NodePort
----  
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mediawiki
+  name: run-jobs
   labels:
-    app: mediawiki
+    app: run-jobs
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: mediawiki
-        tier: frontend
+        app: run-jobs
     spec:
       containers:
-      - image: tfwiki/mediawiki:latest
-        name: mediawiki 
+      - image: tfwiki/mediawiki:1.0.0
         imagePullPolicy: Always
-        readinessProbe:
-          httpGet:
-            path: /wiki/Main_Page
-            port: 80
-        ports:
-        - containerPort: 80
-          name: mediawiki
+        name: run-jobs
+        command: ["php", "/var/www/html/w/maintenance/runJobs.php", "--wait --nothrottle --procs=32"]
         env:
           - name: MEMCACHED_HOST
             valueFrom:
@@ -72,17 +51,60 @@ spec:
               secretKeyRef:
                 name: mediawiki-secret
                 key: captcha.secret
-          - name: GMAIL_SMTP_PASSWORD
+          - name: EMAIL_EMERGENCY_CONTACT
             valueFrom:
               secretKeyRef:
                 name: mediawiki-secret
-                key: gmail.smtp.password
+                key: email.emergency_contact
                 optional: true
-          - name: GMAIL_SMTP_USERNAME
+          - name: EMAIL_PASSWORD_SENDER
             valueFrom:
               secretKeyRef:
                 name: mediawiki-secret
-                key: gmail.smtp.username
+                key: email.password_sender
+                optional: true
+                optional: true
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: sentry.dsn
+                optional: true
+          - name: SMTP_HOST
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.host
+                optional: true
+          - name: SMTP_IDHOST
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.idhost
+                optional: true
+          - name: SMTP_PORT
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.port
+                optional: true
+          - name: SMTP_AUTH
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.auth
+                optional: true
+          - name: SMTP_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.username
+                optional: true
+          - name: SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.password
                 optional: true
           - name: SECRET_KEY
             valueFrom:
@@ -128,28 +150,7 @@ spec:
         volumeMounts:
           - name: mediawiki-images
             mountPath: /var/www/html/w/images
-      - image: gcr.io/cloudsql-docker/gce-proxy:1.11
-        name: cloudsql-proxy
-        command: ["/cloud_sql_proxy", "--dir=/cloudsql",
-                  "-instances=tfwiki-182108:us-central1:tfwiki-development=tcp:3306",
-                  "-credential_file=/secrets/cloudsql/credentials.json"]
-        volumeMounts:
-          - name: cloudsql-instance-credentials
-            mountPath: /secrets/cloudsql
-            readOnly: true
-          - name: ssl-certs
-            mountPath: /etc/ssl/certs
-          - name: cloudsql
-            mountPath: /cloudsql
       volumes:
-        - name: cloudsql-instance-credentials
-          secret:
-            secretName: cloudsql-instance-credentials
-        - name: ssl-certs
-          hostPath:
-            path: /etc/ssl/certs
-        - name: cloudsql
-          emptyDir:
         - name: mediawiki-images
           persistentVolumeClaim:
             claimName: nfs

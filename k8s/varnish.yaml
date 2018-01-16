@@ -4,7 +4,9 @@ metadata:
   name: varnish
 spec:  
   ports:
-    - port: 80
+    - name: varnish
+      port: 80
+      targetPort: varnish
   selector:
     app: varnish
   type: NodePort
@@ -16,7 +18,7 @@ metadata:
   labels:
     app: varnish
 spec:  
-  replicas: 2
+  replicas: 4
   template:
     metadata:
       name: varnish
@@ -25,7 +27,7 @@ spec:
     spec:
       containers:
       - name: varnish
-        image: tfwiki/varnish:latest
+        image: tfwiki/varnish:1.0.0
         imagePullPolicy: Always
         readinessProbe:
           httpGet:
@@ -35,4 +37,5 @@ spec:
         - name: BACKEND_HOST
           value: mediawiki
         ports:
-        - containerPort: 80
+        - name: varnish
+          containerPort: 80

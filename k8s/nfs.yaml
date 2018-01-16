@@ -16,15 +16,6 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mediawiki
-  labels:
-    app: mediawiki
-spec:
-  replicas: 1
-
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
   name: nfs-server
   labels:
     role: nfs-server
@@ -53,7 +44,7 @@ spec:
       volumes:
         - name: mediawiki-images
           gcePersistentDisk:
-            pdName: tfwiki-development-mediawiki-images
+            pdName: tfwiki-production-mediawiki-images
             fsType: ext4
 ---
 apiVersion: v1

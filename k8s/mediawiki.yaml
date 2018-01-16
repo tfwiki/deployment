@@ -6,7 +6,9 @@ metadata:
     app: mediawiki
 spec:
   ports:
-    - port: 80
+    - name: mediawiki
+      port: 80
+      targetPort: mediawiki
   selector:
     app: mediawiki
     tier: frontend
@@ -19,7 +21,7 @@ metadata:
   labels:
     app: mediawiki
 spec:
-  replicas: 1
+  replicas: 6
   template:
     metadata:
       labels:
@@ -27,10 +29,11 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: tfwiki/mediawiki:latest
-        name: mediawiki 
+      - image: tfwiki/mediawiki:1.0.0
         imagePullPolicy: Always
+        name: mediawiki
         readinessProbe:
+          timeoutSeconds: 5
           httpGet:
             path: /wiki/Main_Page
             port: 80
@@ -131,7 +134,7 @@ spec:
       - image: gcr.io/cloudsql-docker/gce-proxy:1.11
         name: cloudsql-proxy
         command: ["/cloud_sql_proxy", "--dir=/cloudsql",
-                  "-instances=tfwiki-182108:us-central1:tfwiki-development=tcp:3306",
+                  "-instances=tfwiki-182108:us-west1:tfwiki-production=tcp:3306",
                   "-credential_file=/secrets/cloudsql/credentials.json"]
         volumeMounts:
           - name: cloudsql-instance-credentials

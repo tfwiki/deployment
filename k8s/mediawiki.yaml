@@ -75,17 +75,54 @@ spec:
               secretKeyRef:
                 name: mediawiki-secret
                 key: captcha.secret
-          - name: GMAIL_SMTP_PASSWORD
+          - name: EMAIL_EMERGENCY_CONTACT
             valueFrom:
               secretKeyRef:
                 name: mediawiki-secret
-                key: gmail.smtp.password
+                key: email.emergency_contact
                 optional: true
-          - name: GMAIL_SMTP_USERNAME
+          - name: EMAIL_PASSWORD_SENDER
             valueFrom:
               secretKeyRef:
                 name: mediawiki-secret
-                key: gmail.smtp.username
+                key: email.password_sender
+                optional: true
+                optional: true
+          - name: SMTP_HOST
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.host
+                optional: true
+          - name: SMTP_IDHOST
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.idhost
+                optional: true
+          - name: SMTP_PORT
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.port
+                optional: true
+          - name: SMTP_AUTH
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.auth
+                optional: true
+          - name: SMTP_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.username
+                optional: true
+          - name: SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: smtp.password
                 optional: true
           - name: SECRET_KEY
             valueFrom:

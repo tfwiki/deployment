@@ -27,6 +27,10 @@ spec:
       labels:
         app: mediawiki
         tier: frontend
+      annotations:
+        service-discovery.datadoghq.com/mediawiki.check_names: '["apache"]'
+        service-discovery.datadoghq.com/mediawiki.init_configs: '[{}]'
+        service-discovery.datadoghq.com/mediawiki.instances: '[{"apache_status_url": "http://%%host%%/server-status?auto"}]'
     spec:
       containers:
       - image: tfwiki/mediawiki:1.0.0

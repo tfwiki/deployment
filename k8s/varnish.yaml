@@ -11,6 +11,19 @@ spec:
     app: varnish
   type: NodePort
 ---
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: all-varnish
+spec:  
+  clusterIP: None
+  ports:
+    - name: varnish
+      port: 80
+      targetPort: varnish
+  selector:
+    app: varnish
+---
 apiVersion: extensions/v1beta1
 kind: Deployment  
 metadata:  

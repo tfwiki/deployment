@@ -1,49 +1,21 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: mediawiki
-  labels:
-    app: mediawiki
-spec:
-  ports:
-    - name: mediawiki
-      port: 80
-      targetPort: mediawiki
-  selector:
-    app: mediawiki
-    tier: frontend
-  type: NodePort
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mediawiki
+  name: run-jobs
   labels:
-    app: mediawiki
+    app: run-jobs
 spec:
-  replicas: 6
+  replicas: 1
   template:
     metadata:
       labels:
-        app: mediawiki
-        tier: frontend
-      annotations:
-        service-discovery.datadoghq.com/mediawiki.check_names: '["apache"]'
-        service-discovery.datadoghq.com/mediawiki.init_configs: '[{}]'
-        service-discovery.datadoghq.com/mediawiki.instances: '[{"apache_status_url": "http://%%host%%/server-status?auto"}]'
+        app: run-jobs
     spec:
       containers:
       - image: tfwiki/mediawiki:1.0.0
         imagePullPolicy: Always
-        name: mediawiki
-        readinessProbe:
-          timeoutSeconds: 5
-          httpGet:
-            path: /wiki/Main_Page
-            port: 80
-        ports:
-        - containerPort: 80
-          name: mediawiki
+        name: run-jobs
+        command: ["php", "/var/www/html/w/maintenance/runJobs.php", "--wait --nothrottle --procs=32"]
         env:
           - name: MEMCACHED_HOST
             valueFrom:

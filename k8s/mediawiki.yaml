@@ -13,7 +13,7 @@ spec:
     app: mediawiki
     tier: frontend
   type: NodePort
----  
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -87,6 +87,12 @@ spec:
                 name: mediawiki-secret
                 key: email.password_sender
                 optional: true
+                optional: true
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: sentry.dsn
                 optional: true
           - name: SMTP_HOST
             valueFrom:

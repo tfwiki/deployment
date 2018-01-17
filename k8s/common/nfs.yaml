@@ -14,19 +14,6 @@ spec:
     role: nfs-server
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: nfs
-spec:
-  capacity:
-    storage: 500Gi
-  accessModes:
-    - ReadWriteMany
-  nfs:
-    server: nfs-server.default.svc.cluster.local
-    path: "/"
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: nfs

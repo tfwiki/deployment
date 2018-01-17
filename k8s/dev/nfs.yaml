@@ -29,18 +29,30 @@ spec:
       volumes:
         - name: mediawiki-images
           gcePersistentDisk:
-            pdName: tfwiki-production-mediawiki-images
+            pdName: tfwiki-development-mediawiki-images
             fsType: ext4
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs
+  name: nfs-dev
 spec:
   capacity:
     storage: 500Gi
   accessModes:
     - ReadWriteMany
   nfs:
-    server: nfs-server.default.svc.cluster.local
+    server: nfs-server.tfwiki-dev.svc.cluster.local
     path: "/"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-dev
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 500Gi

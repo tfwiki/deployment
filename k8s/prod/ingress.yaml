@@ -10,6 +10,7 @@ spec:
   tls:
   - secretName: prod-tls
     hosts:
+    - wiki.teamfortress.com
     - prod.wiki.tf
   backend:
     serviceName: varnish

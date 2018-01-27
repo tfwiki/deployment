@@ -25,7 +25,7 @@ spec:
     kind: Deployment
     name: mediawiki
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 100
   targetCPUUtilizationPercentage: 80
 ---
 apiVersion: extensions/v1beta1
@@ -35,7 +35,7 @@ metadata:
   labels:
     app: mediawiki
 spec:
-  replicas: 6
+  replicas: 20
   template:
     metadata:
       labels:
@@ -55,6 +55,11 @@ spec:
           httpGet:
             path: /wiki/Main_Page
             port: 80
+        resources:
+          limits:
+            cpu: "4"
+          requests:
+            cpu: "1"
         ports:
         - containerPort: 80
           name: mediawiki

@@ -21,7 +21,7 @@ metadata:
   labels:
     app: cloudsql-proxy
 spec:
-  replicas: 1
+  replicas: 4
   template:
     metadata:
       labels:
@@ -53,3 +53,17 @@ spec:
             path: /etc/ssl/certs
         - name: cloudsql
           emptyDir:
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cloudsql-proxy
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: cloudsql-proxy
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80

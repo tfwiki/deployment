@@ -21,7 +21,7 @@ metadata:
     app: memcached
 spec:
   serviceName: memcached
-  replicas: 1
+  replicas: 10
   template:
     metadata:
       labels:
@@ -31,9 +31,14 @@ spec:
       - name: memcached
         image: memcached:latest
         imagePullPolicy: Always
+        resources:
+          requests:
+            memory: 1024Mi
+            cpu: 100m
         command:
         - memcached
-        - -m 128
+        - -m 1024
+        - -c 10000
         ports:
         - name: memcached
           containerPort: 11211

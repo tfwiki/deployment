@@ -24,7 +24,7 @@ spec:
     apiVersion: apps/v1beta1
     kind: Deployment
     name: mediawiki
-  minReplicas: 1
+  minReplicas: 20
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
 ---
@@ -47,7 +47,7 @@ spec:
         service-discovery.datadoghq.com/mediawiki.instances: '[{"apache_status_url": "http://%%host%%/server-status?auto"}]'
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.0
+      - image: tfwiki/mediawiki:1.0.3
         imagePullPolicy: Always
         name: mediawiki
         readinessProbe:
@@ -57,9 +57,11 @@ spec:
             port: 80
         resources:
           limits:
-            cpu: "4"
+            cpu: "2"
+            memory: "4Gi"
           requests:
             cpu: "1"
+            memory: "2Gi"
         ports:
         - containerPort: 80
           name: mediawiki

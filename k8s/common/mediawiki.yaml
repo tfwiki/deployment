@@ -24,8 +24,8 @@ spec:
     apiVersion: apps/v1beta1
     kind: Deployment
     name: mediawiki
-  minReplicas: 20
-  maxReplicas: 100
+  minReplicas: 4
+  maxReplicas: 18
   targetCPUUtilizationPercentage: 80
 ---
 apiVersion: extensions/v1beta1
@@ -35,7 +35,7 @@ metadata:
   labels:
     app: mediawiki
 spec:
-  replicas: 20
+  replicas: 4
   template:
     metadata:
       labels:
@@ -57,10 +57,10 @@ spec:
             port: 80
         resources:
           limits:
-            cpu: "2"
-            memory: "4Gi"
+            cpu: "10"
+            memory: "8Gi"
           requests:
-            cpu: "1"
+            cpu: "8"
             memory: "2Gi"
         ports:
         - containerPort: 80

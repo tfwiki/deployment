@@ -18,23 +18,25 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: mediawiki
+  namespace: tfwiki-dev
 spec:
   scaleTargetRef:
     apiVersion: apps/v1beta1
     kind: Deployment
     name: mediawiki
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: mediawiki
+  namespace: tfwiki-dev
   labels:
     app: mediawiki
 spec:
-  replicas: 6
+  replicas: 1
   template:
     metadata:
       labels:
@@ -46,7 +48,7 @@ spec:
         service-discovery.datadoghq.com/mediawiki.instances: '[{"apache_status_url": "http://%%host%%/server-status?auto"}]'
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.0
+      - image: tfwiki/mediawiki:1.0.6
         imagePullPolicy: Always
         name: mediawiki
         readinessProbe:
@@ -54,6 +56,13 @@ spec:
           httpGet:
             path: /wiki/Main_Page
             port: 80
+        resources:
+          limits:
+            cpu: "10"
+            memory: "8Gi"
+          requests:
+            cpu: "8"
+            memory: "2Gi"
         ports:
         - containerPort: 80
           name: mediawiki

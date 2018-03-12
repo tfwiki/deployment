@@ -11,8 +11,7 @@ spec:
         app: mediawiki-update
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.5
-        imagePullPolicy: Always
+      - image: tfwiki/mediawiki:1.0.6
         name: mediawiki-update
         command: ["php", "/var/www/html/w/maintenance/update.php", "--skip-external-dependencies"]
         env:

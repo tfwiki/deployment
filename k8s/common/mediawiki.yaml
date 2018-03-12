@@ -47,7 +47,7 @@ spec:
         service-discovery.datadoghq.com/mediawiki.instances: '[{"apache_status_url": "http://%%host%%/server-status?auto"}]'
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.5
+      - image: tfwiki/mediawiki:1.0.6
         name: mediawiki
         readinessProbe:
           timeoutSeconds: 5

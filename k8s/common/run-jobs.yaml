@@ -5,7 +5,7 @@ metadata:
   labels:
     app: run-jobs
 spec:
-  replicas: 1
+  replicas: 8
   template:
     metadata:
       labels:
@@ -14,7 +14,7 @@ spec:
       containers:
       - image: tfwiki/mediawiki:1.0.7
         name: run-jobs
-        command: ["php", "/var/www/html/w/maintenance/runJobs.php", "--wait --nothrottle --procs=32"]
+        command: ["php", "/var/www/html/w/maintenance/runJobs.php", "--wait", "--procs 1", "--maxjobs 100"]
         env:
           - name: MEMCACHED_HOST
             valueFrom:

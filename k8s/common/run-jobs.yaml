@@ -12,7 +12,7 @@ spec:
         app: run-jobs
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.7
+      - image: tfwiki/mediawiki:1.0.8
         name: run-jobs
         command: ["php", "/var/www/html/w/maintenance/runJobs.php", "--wait", "--procs 1", "--maxjobs 100"]
         env:
@@ -38,6 +38,12 @@ spec:
               configMapKeyRef:
                 name: mediawiki-config
                 key: varnish_host
+                optional: true
+          - name: TRUSTED_PROXIES
+            valueFrom:
+              configMapKeyRef:
+                name: mediawiki-config
+                key: trusted_proxies
                 optional: true
           - name: BLACKFIRE_SOCKET
             valueFrom:

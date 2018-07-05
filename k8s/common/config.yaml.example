@@ -7,3 +7,4 @@ data:
   server_url:
   sitename:
   varnish_host:
+  trusted_proxies: 

@@ -48,7 +48,7 @@ spec:
         service-discovery.datadoghq.com/mediawiki.instances: '[{"apache_status_url": "http://%%host%%/server-status?auto"}]'
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.7
+      - image: tfwiki/mediawiki:1.0.8
         imagePullPolicy: Always
         name: mediawiki
         readinessProbe:
@@ -89,6 +89,12 @@ spec:
               configMapKeyRef:
                 name: mediawiki-config
                 key: varnish_host
+                optional: true
+          - name: TRUSTED_PROXIES
+            valueFrom:
+              configMapKeyRef:
+                name: mediawiki-config
+                key: trusted_proxies
                 optional: true
           - name: BLACKFIRE_SOCKET
             valueFrom:

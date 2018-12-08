@@ -12,7 +12,7 @@ spec:
         app: run-jobs
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.11
+      - image: tfwiki/mediawiki:1.0.12
         name: run-jobs
         command: ["php", "/var/www/html/w/maintenance/runJobs.php", "--wait", "--procs 1", "--maxjobs 100"]
         env:

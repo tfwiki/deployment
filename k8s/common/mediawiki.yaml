@@ -24,7 +24,7 @@ spec:
     apiVersion: apps/v1beta1
     kind: Deployment
     name: mediawiki
-  minReplicas: 4
+  minReplicas: 8
   maxReplicas: 18
   targetCPUUtilizationPercentage: 80
 ---
@@ -35,7 +35,6 @@ metadata:
   labels:
     app: mediawiki
 spec:
-  replicas: 4
   template:
     metadata:
       labels:

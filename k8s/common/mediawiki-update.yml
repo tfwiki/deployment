@@ -11,7 +11,7 @@ spec:
         app: mediawiki-update
     spec:
       containers:
-      - image: tfwiki/mediawiki:1.0.13
+      - image: tfwiki/mediawiki:1.0.14
         name: mediawiki-update
         command: ["php", "/var/www/html/w/maintenance/update.php", "--skip-external-dependencies"]
         env:
@@ -50,11 +50,16 @@ spec:
                 name: mediawiki-config
                 key: blackfire_socket
                 optional: true
-          - name: CAPTCHA_SECRET
+          - name: RECAPTCHA_KEY
             valueFrom:
               secretKeyRef:
                 name: mediawiki-secret
-                key: captcha.secret
+                key: recaptcha.key
+          - name: RECAPTCHA_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: recaptcha.secret
           - name: EMAIL_EMERGENCY_CONTACT
             valueFrom:
               secretKeyRef:

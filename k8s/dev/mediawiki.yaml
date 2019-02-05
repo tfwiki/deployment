@@ -48,7 +48,7 @@ spec:
         service-discovery.datadoghq.com/mediawiki.instances: '[{"apache_status_url": "http://%%host%%/server-status?auto"}]'
     spec:
       containers:
-      - image: tfwiki/mediawiki:2
+      - image: tfwiki/mediawiki:1.0.14
         imagePullPolicy: Always
         name: mediawiki
         readinessProbe:
@@ -102,11 +102,16 @@ spec:
                 name: mediawiki-config
                 key: blackfire_socket
                 optional: true
-          - name: CAPTCHA_SECRET
+          - name: RECAPTCHA_KEY
             valueFrom:
               secretKeyRef:
                 name: mediawiki-secret
-                key: captcha.secret
+                key: recaptcha.key
+          - name: RECAPTCHA_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: mediawiki-secret
+                key: recaptcha.secret
           - name: EMAIL_EMERGENCY_CONTACT
             valueFrom:
               secretKeyRef:

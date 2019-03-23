@@ -1,19 +1,26 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: mediawiki-update
+  name: install-structured-discussions
   labels:
-    app: mediawiki-update
+    app: mediawiki
 spec:
   template:
     metadata:
-      labels:
-        app: mediawiki-update
+      name: install-structured-discussions
     spec:
+      restartPolicy: Never
       containers:
       - image: tfwiki/mediawiki:1.0.18
-        name: mediawiki-update
-        command: ["php", "/var/www/html/w/maintenance/update.php", "--skip-external-dependencies"]
+        name: update-special-pages
+        command: ["/bin/sh", "-c"]
+        args:
+          - php /var/www/html/w/maintenance/populateContentModel.php --ns=1 --table=revision;
+            php /var/www/html/w/maintenance/populateContentModel.php --ns=1 --table=archive;
+            php /var/www/html/w/maintenance/populateContentModel.php --ns=1 --table=page;
+            php /var/www/html/w/maintenance/populateContentModel.php --ns=3 --table=revision;
+            php /var/www/html/w/maintenance/populateContentModel.php --ns=3 --table=archive;
+            php /var/www/html/w/maintenance/populateContentModel.php --ns=3 --table=page;
         env:
           - name: MEMCACHED_HOST
             valueFrom:
@@ -163,5 +170,3 @@ spec:
         - name: mediawiki-images
           persistentVolumeClaim:
             claimName: nfs
-      restartPolicy: Never
-  backoffLimit: 4

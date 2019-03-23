@@ -15,7 +15,8 @@ spec:
         spec:
           restartPolicy: OnFailure
           containers:
-          - image: tfwiki/mediawiki:1.0.18
+          - image: tfwiki/mediawiki:1.0.19
+            imagePullPolicy: Always
             name: update-special-pages
             command: ["php", "/var/www/html/w/maintenance/updateSpecialPages.php"]
             env:

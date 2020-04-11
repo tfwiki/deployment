@@ -1,6 +1,10 @@
-kind: Namespace
 apiVersion: v1
+kind: Namespace
 metadata:
-  name: tfwiki-dev
+  creationTimestamp: null
   labels:
     name: tfwiki-dev
+  name: tfwiki-dev
+spec: {}
+status:
+  phase: Active

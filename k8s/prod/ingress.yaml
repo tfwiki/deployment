@@ -1,18 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: prod-ingress
   annotations:
-    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: tfwiki-production-static-ip
     kubernetes.io/tls-acme: "true"
+  creationTimestamp: null
+  name: prod-ingress
 spec:
-  tls:
-  - secretName: prod-tls
-    hosts:
-    - wiki.teamfortress.com
-    - wiki.tf2.com
-    - prod.wiki.tf
   backend:
     serviceName: varnish
     servicePort: varnish
+  tls:
+  - hosts:
+    - wiki.teamfortress.com
+    - wiki.tf2.com
+    - prod.wiki.tf
+    secretName: prod-tls
+status:
+  loadBalancer: {}

@@ -1,16 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: dev-ingress
   annotations:
-    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: tfwiki-development-static-ip
     kubernetes.io/tls-acme: "true"
+  creationTimestamp: null
+  name: dev-ingress
 spec:
-  tls:
-  - secretName: dev-tls
-    hosts:
-    - dev.wiki.tf
   backend:
     serviceName: varnish
     servicePort: varnish
+  tls:
+  - hosts:
+    - dev.wiki.tf
+    secretName: dev-tls
+status:
+  loadBalancer: {}

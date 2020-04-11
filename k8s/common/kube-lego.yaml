@@ -1,124 +1,161 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: kube-lego
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: kube-lego
-  name: kube-lego
-  namespace: kube-lego
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
-metadata:
-  labels:
-    app: kube-lego
-  name: kube-lego
-  namespace: kube-lego
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - services
-  verbs:
-  - create
-  - get
-  - delete
-  - update
-- apiGroups:
-  - extensions
-  resources:
-  - ingresses
-  verbs:
-  - get
-  - update
-  - create
-  - list
-  - patch
-  - delete
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - endpoints
-  - secrets
-  verbs:
-  - get
-  - create
-  - update
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  labels:
-    app: kube-lego
-  name: kube-lego
-  namespace: kube-lego
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
+items:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    creationTimestamp: null
+    name: kube-lego
+  spec: {}
+  status:
+    phase: Active
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: kube-lego
+    name: kube-lego
+    namespace: kube-lego
+- apiVersion: rbac.authorization.k8s.io/v1
   kind: ClusterRole
-  name: kube-lego
-subjects:
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: kube-lego
+    name: kube-lego
+    namespace: kube-lego
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - services
+    verbs:
+    - create
+    - get
+    - delete
+    - update
+  - apiGroups:
+    - extensions
+    resources:
+    - ingresses
+    verbs:
+    - get
+    - update
+    - create
+    - list
+    - patch
+    - delete
+    - watch
+  - apiGroups:
+    - ""
+    resources:
+    - endpoints
+    - secrets
+    verbs:
+    - get
+    - create
+    - update
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: kube-lego
+    name: kube-lego
+    namespace: kube-lego
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: kube-lego
+  subjects:
   - kind: ServiceAccount
     name: kube-lego
     namespace: kube-lego
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kube-lego
-  namespace: kube-lego
-data:
-  lego.email: "staff@wiki.tf"
-  lego.url: "https://acme-v01.api.letsencrypt.org/directory"
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: kube-lego
-  namespace: kube-lego
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        # Required for the auto-create kube-lego-nginx service to work.
+- apiVersion: v1
+  data:
+    lego.email: staff@wiki.tf
+    lego.url: https://acme-v01.api.letsencrypt.org/directory
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: kube-lego
+    namespace: kube-lego
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: kube-lego
+    name: kube-lego
+    namespace: kube-lego
+  spec:
+    progressDeadlineSeconds: 2147483647
+    replicas: 1
+    revisionHistoryLimit: 2147483647
+    selector:
+      matchLabels:
         app: kube-lego
-    spec:
-      serviceAccountName: kube-lego
-      containers:
-      - name: kube-lego
-        image: jetstack/kube-lego:0.1.5
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        env:
-        - name: LEGO_LOG_LEVEL
-          value: debug
-        - name: LEGO_EMAIL
-          valueFrom:
-            configMapKeyRef:
-              name: kube-lego
-              key: lego.email
-        - name: LEGO_URL
-          valueFrom:
-            configMapKeyRef:
-              name: kube-lego
-              key: lego.url
-        - name: LEGO_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: LEGO_POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: kube-lego
+      spec:
+        containers:
+        - env:
+          - name: LEGO_LOG_LEVEL
+            value: debug
+          - name: LEGO_EMAIL
+            valueFrom:
+              configMapKeyRef:
+                key: lego.email
+                name: kube-lego
+          - name: LEGO_URL
+            valueFrom:
+              configMapKeyRef:
+                key: lego.url
+                name: kube-lego
+          - name: LEGO_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: LEGO_POD_IP
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          image: jetstack/kube-lego:0.1.5
+          imagePullPolicy: Always
+          name: kube-lego
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: kube-lego
+        serviceAccountName: kube-lego
+        terminationGracePeriodSeconds: 30
+  status: {}
+kind: List
+metadata: {}

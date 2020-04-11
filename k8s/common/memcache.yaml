@@ -1,54 +1,88 @@
 apiVersion: v1
-kind: Service
-metadata:
-  name: memcached
-  labels:
-    app: memcached
-spec:
-  clusterIP: None
-  ports:
-  - name: memcached
-    port: 11211
-    targetPort: memcached
-  selector:
-    app: memcached
----
-apiVersion: apps/v1beta1
-kind: StatefulSet
-metadata:
-  name: memcached
-  labels:
-    app: memcached
-spec:
-  serviceName: memcached
-  replicas: 10
-  template:
-    metadata:
-      labels:
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: memcached
+    name: memcached
+  spec:
+    clusterIP: None
+    ports:
+    - name: memcached
+      port: 11211
+      protocol: TCP
+      targetPort: memcached
+    selector:
+      app: memcached
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: memcached
+    name: memcached
+  spec:
+    podManagementPolicy: OrderedReady
+    replicas: 10
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
         app: memcached
-    spec:
-      containers:
-      - name: memcached
-        image: memcached:latest
-        imagePullPolicy: Always
-        resources:
-          requests:
-            memory: 1024Mi
-            cpu: 100m
-        command:
-        - memcached
-        - -m 1024
-        - -c 10000
-        ports:
-        - name: memcached
-          containerPort: 11211
-        livenessProbe:
-          tcpSocket:
-            port: memcached
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-        readinessProbe:
-          tcpSocket:
-            port: memcached
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+    serviceName: memcached
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: memcached
+      spec:
+        containers:
+        - command:
+          - memcached
+          - -m 1024
+          - -c 10000
+          image: memcached:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: memcached
+            timeoutSeconds: 5
+          name: memcached
+          ports:
+          - containerPort: 11211
+            name: memcached
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: memcached
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    updateStrategy:
+      type: OnDelete
+  status:
+    replicas: 0
+kind: List
+metadata: {}

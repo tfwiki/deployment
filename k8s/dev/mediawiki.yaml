@@ -61,11 +61,6 @@ items:
       type: RollingUpdate
     template:
       metadata:
-        annotations:
-          service-discovery.datadoghq.com/mediawiki.check_names: '["apache"]'
-          service-discovery.datadoghq.com/mediawiki.init_configs: '[{}]'
-          service-discovery.datadoghq.com/mediawiki.instances: '[{"apache_status_url":
-            "http://%%host%%/server-status?auto"}]'
         creationTimestamp: null
         labels:
           app: mediawiki

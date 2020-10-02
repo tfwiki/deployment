@@ -174,7 +174,13 @@ spec:
         image: tfwiki/mediawiki:1.0.19
         imagePullPolicy: Always
         name: run-jobs
-        resources: {}
+        resources:
+          limits:
+            cpu: "10"
+            memory: 8Gi
+          requests:
+            cpu: "8"
+            memory: 2Gi
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:

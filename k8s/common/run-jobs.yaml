@@ -7,7 +7,7 @@ metadata:
   name: run-jobs
 spec:
   progressDeadlineSeconds: 2147483647
-  replicas: 8
+  replicas: 4
   revisionHistoryLimit: 2147483647
   selector:
     matchLabels:
@@ -171,7 +171,7 @@ spec:
               key: db.user
               name: mediawiki-secret
               optional: true
-        image: tfwiki/mediawiki:1.0.19
+        image: tfwiki/mediawiki:1.0.20
         imagePullPolicy: Always
         name: run-jobs
         resources:

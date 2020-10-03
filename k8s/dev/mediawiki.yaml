@@ -208,7 +208,7 @@ items:
                 key: db.user
                 name: mediawiki-secret
                 optional: true
-          image: tfwiki/mediawiki:1.0.19
+          image: tfwiki/mediawiki:1.0.21
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 6

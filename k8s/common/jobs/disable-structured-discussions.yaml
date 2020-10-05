@@ -1,0 +1,187 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mediawiki
+  name: disable-structured-discussions
+spec:
+  backoffLimit: 6
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      name: disable-structured-discussions
+    spec:
+      containers:
+      - args:
+        - php /var/www/html/w/maintenance/populateContentModel.php --ns=1 --table=revision;
+          php /var/www/html/w/maintenance/populateContentModel.php --ns=1 --table=archive;
+          php /var/www/html/w/maintenance/populateContentModel.php --ns=1 --table=page;
+          php /var/www/html/w/maintenance/populateContentModel.php --ns=3 --table=revision;
+          php /var/www/html/w/maintenance/populateContentModel.php --ns=3 --table=archive;
+          php /var/www/html/w/maintenance/populateContentModel.php --ns=3 --table=page;
+        command:
+        - /bin/sh
+        - -c
+        env:
+        - name: MEMCACHED_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: memcached_host
+              name: mediawiki-config
+              optional: true
+        - name: SERVER_URL
+          valueFrom:
+            configMapKeyRef:
+              key: server_url
+              name: mediawiki-config
+        - name: SITENAME
+          valueFrom:
+            configMapKeyRef:
+              key: sitename
+              name: mediawiki-config
+              optional: true
+        - name: VARNISH_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: varnish_host
+              name: mediawiki-config
+              optional: true
+        - name: TRUSTED_PROXIES
+          valueFrom:
+            configMapKeyRef:
+              key: trusted_proxies
+              name: mediawiki-config
+              optional: true
+        - name: BLACKFIRE_SOCKET
+          valueFrom:
+            configMapKeyRef:
+              key: blackfire_socket
+              name: mediawiki-config
+              optional: true
+        - name: RECAPTCHA_KEY
+          valueFrom:
+            secretKeyRef:
+              key: recaptcha.key
+              name: mediawiki-secret
+        - name: RECAPTCHA_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: recaptcha.secret
+              name: mediawiki-secret
+        - name: EMAIL_EMERGENCY_CONTACT
+          valueFrom:
+            secretKeyRef:
+              key: email.emergency_contact
+              name: mediawiki-secret
+              optional: true
+        - name: EMAIL_PASSWORD_SENDER
+          valueFrom:
+            secretKeyRef:
+              key: email.password_sender
+              name: mediawiki-secret
+              optional: true
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              key: sentry.dsn
+              name: mediawiki-secret
+              optional: true
+        - name: SMTP_HOST
+          valueFrom:
+            secretKeyRef:
+              key: smtp.host
+              name: mediawiki-secret
+              optional: true
+        - name: SMTP_IDHOST
+          valueFrom:
+            secretKeyRef:
+              key: smtp.idhost
+              name: mediawiki-secret
+              optional: true
+        - name: SMTP_PORT
+          valueFrom:
+            secretKeyRef:
+              key: smtp.port
+              name: mediawiki-secret
+              optional: true
+        - name: SMTP_AUTH
+          valueFrom:
+            secretKeyRef:
+              key: smtp.auth
+              name: mediawiki-secret
+              optional: true
+        - name: SMTP_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: smtp.username
+              name: mediawiki-secret
+              optional: true
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: smtp.password
+              name: mediawiki-secret
+              optional: true
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: secret_key
+              name: mediawiki-secret
+        - name: STEAM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: steam.api.key
+              name: mediawiki-secret
+              optional: true
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: db.password
+              name: mediawiki-secret
+              optional: true
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: db.database
+              name: mediawiki-secret
+              optional: true
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              key: db.host
+              name: mediawiki-secret
+              optional: true
+        - name: DB_TYPE
+          valueFrom:
+            secretKeyRef:
+              key: db.type
+              name: mediawiki-secret
+              optional: true
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: db.user
+              name: mediawiki-secret
+              optional: true
+        image: tfwiki/mediawiki:1.0.19
+        imagePullPolicy: IfNotPresent
+        name: update-special-pages
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/www/html/w/images
+          name: mediawiki-images
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: mediawiki-images
+        persistentVolumeClaim:
+          claimName: nfs
+status: {}

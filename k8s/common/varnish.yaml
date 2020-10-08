@@ -66,7 +66,7 @@ items:
         - env:
           - name: BACKEND_HOST
             value: mediawiki
-          image: tfwiki/varnish:1.0.2
+          image: tfwiki/varnish:1.0.3
           imagePullPolicy: IfNotPresent
           name: varnish
           ports:

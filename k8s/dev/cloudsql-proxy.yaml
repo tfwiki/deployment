@@ -51,7 +51,7 @@ items:
         - command:
           - /cloud_sql_proxy
           - --dir=/cloudsql
-          - -instances=tfwiki-182108:us-central1:tfwiki-development=tcp:0.0.0.0:3306
+          - -instances=tfwiki-182108:us-central1:tfwiki-development-upgrade-test-20201010=tcp:0.0.0.0:3306
           - -credential_file=/secrets/cloudsql/credentials.json
           image: gcr.io/cloudsql-docker/gce-proxy:1.11
           imagePullPolicy: IfNotPresent

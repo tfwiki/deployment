@@ -183,5 +183,5 @@ spec:
               claimName: nfs
   schedule: 0 * * * *
   successfulJobsHistoryLimit: 3
-  suspend: false
+  suspend: true
 status: {}

@@ -88,12 +88,12 @@ spec:
               key: email.password_sender
               name: mediawiki-secret
               optional: true
-        - name: SENTRY_DSN
-          valueFrom:
-            secretKeyRef:
-              key: sentry.dsn
-              name: mediawiki-secret
-              optional: true
+        # - name: SENTRY_DSN
+        #   valueFrom:
+        #     secretKeyRef:
+        #       key: sentry.dsn
+        #       name: mediawiki-secret
+        #       optional: true
         - name: SMTP_HOST
           valueFrom:
             secretKeyRef:

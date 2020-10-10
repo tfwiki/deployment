@@ -7,6 +7,7 @@ items:
     labels:
       app: cloudsql-proxy
     name: cloudsql-proxy
+    namespace: tfwiki-dev
   spec:
     externalTrafficPolicy: Cluster
     ports:
@@ -27,6 +28,7 @@ items:
     labels:
       app: cloudsql-proxy
     name: cloudsql-proxy
+    namespace: tfwiki-dev
   spec:
     progressDeadlineSeconds: 2147483647
     replicas: 1

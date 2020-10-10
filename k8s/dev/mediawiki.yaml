@@ -211,7 +211,7 @@ items:
                 key: db.user
                 name: mediawiki-secret
                 optional: true
-          image: tfwiki/mediawiki:1.31-tfwiki0-rc3
+          image: tfwiki/mediawiki:1.31-tfwiki1
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 6

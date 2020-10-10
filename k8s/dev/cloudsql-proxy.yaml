@@ -22,7 +22,7 @@ items:
   status:
     loadBalancer: {}
 - apiVersion: apps/v1
-  kind: Deployment
+  kind: DaemonSet
   metadata:
     creationTimestamp: null
     labels:
@@ -30,17 +30,10 @@ items:
     name: cloudsql-proxy
     namespace: tfwiki-dev
   spec:
-    progressDeadlineSeconds: 2147483647
-    replicas: 1
-    revisionHistoryLimit: 2147483647
+    revisionHistoryLimit: 10
     selector:
       matchLabels:
         app: cloudsql-proxy
-    strategy:
-      rollingUpdate:
-        maxSurge: 1
-        maxUnavailable: 1
-      type: RollingUpdate
     template:
       metadata:
         creationTimestamp: null
@@ -87,6 +80,5 @@ items:
           name: ssl-certs
         - emptyDir: {}
           name: cloudsql
-  status: {}
 kind: List
 metadata: {}

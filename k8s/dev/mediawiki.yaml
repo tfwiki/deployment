@@ -29,8 +29,8 @@ items:
     name: mediawiki
     namespace: tfwiki-dev
   spec:
-    maxReplicas: 2
-    minReplicas: 1
+    maxReplicas: 4
+    minReplicas: 2
     scaleTargetRef:
       apiVersion: apps/v1beta1
       kind: Deployment
@@ -69,8 +69,8 @@ items:
       spec:
         containers:
         - env:
-          - name: READ_ONLY_MESSAGE
-            value: 'This wiki is currently being upgraded to a newer software version. ETA ????.'
+          # - name: READ_ONLY_MESSAGE
+            # value: 'This wiki is currently being upgraded to a newer software version. ETA ????.'
           - name: MEMCACHED_HOST
             valueFrom:
               configMapKeyRef:
@@ -211,7 +211,7 @@ items:
                 key: db.user
                 name: mediawiki-secret
                 optional: true
-          image: tfwiki/mediawiki:1.0.22
+          image: tfwiki/mediawiki:1.31-tfwiki0-rc3
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 6

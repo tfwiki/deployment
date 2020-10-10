@@ -218,7 +218,7 @@ items:
               scheme: HTTP
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 3
+            timeoutSeconds: 30
           name: mediawiki
           ports:
           - containerPort: 80

@@ -67,8 +67,8 @@ items:
       spec:
         containers:
         - env:
-          - name: READ_ONLY_MESSAGE
-            value: 'Maintenance in progress from [https://www.timeanddate.com/worldclock/fixedtime.html?msg=Team+Fortress+Wiki+maintenance&iso=20201010T18&p1=1440&ah=3 18:00 UTC to 21:00 UTC].'
+          # - name: READ_ONLY_MESSAGE
+            # value: 'Maintenance in progress from [https://www.timeanddate.com/worldclock/fixedtime.html?msg=Team+Fortress+Wiki+maintenance&iso=20201010T18&p1=1440&ah=3 18:00 UTC to 21:00 UTC].'
           - name: MEMCACHED_HOST
             valueFrom:
               configMapKeyRef:

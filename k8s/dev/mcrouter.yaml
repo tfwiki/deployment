@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      namespace: tfwiki-dev
+      name: mcrouter
+      labels:
+        app: mcrouter
+    spec:
+      clusterIP: None
+      ports:
+      - name: mcrouter-port
+        port: 5000
+        targetPort: mcrouter-port
+      selector:
+        app: mcrouter
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      namespace: tfwiki-dev
+      name: mcrouter
+      labels:
+        app: mcrouter
+    data:
+      config.json: |-
+        {
+          "pools": {
+            "A": {
+              "servers": [
+                "memcached-0.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-1.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-2.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-3.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-4.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-5.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-6.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-7.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-8.memcached.tfwiki-dev.svc.cluster.local:11211",
+                "memcached-9.memcached.tfwiki-dev.svc.cluster.local:11211",
+              ]
+            }
+          },
+          "route": "PoolRoute|A"
+        }
+  - apiVersion: apps/v1
+    kind: DaemonSet
+    metadata:
+      namespace: tfwiki-dev
+      name: mcrouter
+      labels:
+        app: mcrouter
+    spec:
+      selector:
+        matchLabels:
+          app: mcrouter
+      template:
+        metadata:
+          labels:
+            app: mcrouter
+        spec:
+          containers:
+          - name: mcrouter
+            image: jphalip/mcrouter:0.36.0
+            imagePullPolicy: Always
+            command: ["mcrouter"]
+            args:
+            - -p 5000
+            - --config-file=/etc/mcrouter/config.json
+            volumeMounts:
+            - name: config
+              mountPath: /etc/mcrouter
+            ports:
+            - name: mcrouter-port
+              containerPort: 5000
+              hostPort: 5001
+            livenessProbe:
+              tcpSocket:
+                port: mcrouter-port
+              initialDelaySeconds: 30
+              timeoutSeconds: 5
+            readinessProbe:
+              tcpSocket:
+                port: mcrouter-port
+              initialDelaySeconds: 5
+              timeoutSeconds: 1
+            resources:
+                requests:
+                    cpu: 100m
+                    memory: 128Mi
+                limits:
+                    cpu: 256m
+                    memory: 512Mi
+          volumes:
+          - name: config
+            configMap:
+              name: mcrouter

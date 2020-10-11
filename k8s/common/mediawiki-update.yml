@@ -16,12 +16,12 @@ spec:
         name: mediawiki-update
         command: ["php", "/var/www/html/w/maintenance/update.php", "--skip-external-dependencies"]
         env:
-          - name: MEMCACHED_HOST
+          - name: NODE_NAME
             valueFrom:
-              configMapKeyRef:
-                name: mediawiki-config
-                key: memcached_host
-                optional: true
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: MEMCACHED_HOST
+            value: "$(NODE_NAME):5001"
           - name: SERVER_URL
             valueFrom:
               configMapKeyRef:

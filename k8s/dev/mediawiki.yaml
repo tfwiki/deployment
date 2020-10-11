@@ -71,12 +71,12 @@ items:
         - env:
           # - name: READ_ONLY_MESSAGE
             # value: 'This wiki is currently being upgraded to a newer software version. ETA ????.'
-          - name: MEMCACHED_HOST
+          - name: NODE_NAME
             valueFrom:
-              configMapKeyRef:
-                key: memcached_host
-                name: mediawiki-config
-                optional: true
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: MEMCACHED_HOST
+            value: "$(NODE_NAME):5001"
           - name: SERVER_URL
             valueFrom:
               configMapKeyRef:
@@ -211,7 +211,7 @@ items:
                 key: db.user
                 name: mediawiki-secret
                 optional: true
-          image: tfwiki/mediawiki:1.31-tfwiki1
+          image: tfwiki/mediawiki:test-mcrouter-2
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 6

@@ -83,13 +83,15 @@ items:
               initialDelaySeconds: 5
               timeoutSeconds: 1
             resources:
-                requests:
-                    cpu: "512m"
-                    memory: 128Mi
-                limits:
-                    cpu: "1024m"
-                    memory: 512Mi
+              requests:
+                  cpu: "1"
+                  memory: 128Mi
+              limits:
+                  cpu: "2"
+                  memory: 512Mi
           volumes:
           - name: config
             configMap:
               name: mcrouter
+      updateStrategy:
+        type: RollingUpdate

@@ -209,7 +209,7 @@ items:
                 key: db.user
                 name: mediawiki-secret
                 optional: true
-          image: tfwiki/mediawiki:1.31-tfwiki2
+          image: tfwiki/mediawiki:1.31-tfwiki3
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 6

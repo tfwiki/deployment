@@ -165,6 +165,6 @@ spec:
       volumes:
         - name: mediawiki-images
           persistentVolumeClaim:
-            claimName: nfs-dev
+            claimName: dev-images-claim
       restartPolicy: Never
   backoffLimit: 4

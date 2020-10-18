@@ -256,7 +256,7 @@ items:
         volumes:
         - name: mediawiki-images
           persistentVolumeClaim:
-            claimName: nfs-dev
+            claimName: dev-images-claim
   status: {}
 kind: List
 metadata: {}

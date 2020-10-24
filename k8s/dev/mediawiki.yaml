@@ -248,6 +248,7 @@ items:
           volumeMounts:
           - mountPath: /var/www/html/w/images
             name: mediawiki-images
+            subPath: dev
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler

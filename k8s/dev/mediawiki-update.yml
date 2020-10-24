@@ -162,6 +162,7 @@ spec:
         volumeMounts:
           - name: mediawiki-images
             mountPath: /var/www/html/w/images
+            subPath: dev
       volumes:
         - name: mediawiki-images
           persistentVolumeClaim:

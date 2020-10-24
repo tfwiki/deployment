@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rsync-nfs-to-filestore-20201024
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - name: rsync-nfs-to-filestore
+          image: instrumentisto/rsync-ssh
+          command: ["rsync"]
+          args:
+            [
+              "-aPhW",
+              "--no-compress",
+              "--inplace",
+              # "--exclude", "archive",
+              # "--exclude", "thumb",
+              # "--exclude", "deleted",
+              "/images-nfs/",
+              "/images-filestore/",
+            ]
+          volumeMounts:
+            - mountPath: /images-filestore
+              name: filestore-images
+              subPath: prod
+            - mountPath: /images-nfs
+              name: nfs-images
+      volumes:
+        - name: filestore-images
+          persistentVolumeClaim:
+            claimName: tfwiki-media-prod-claim
+        - name: nfs-images
+          persistentVolumeClaim:
+            claimName: nfs
+      restartPolicy: Never

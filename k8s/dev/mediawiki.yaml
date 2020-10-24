@@ -256,7 +256,7 @@ items:
         volumes:
         - name: mediawiki-images
           persistentVolumeClaim:
-            claimName: dev-images-claim
+            claimName: tfwiki-media-dev-claim
   status: {}
 kind: List
 metadata: {}

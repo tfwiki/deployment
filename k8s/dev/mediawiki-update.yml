@@ -165,6 +165,6 @@ spec:
       volumes:
         - name: mediawiki-images
           persistentVolumeClaim:
-            claimName: dev-images-claim
+            claimName: tfwiki-media-dev-claim
       restartPolicy: Never
   backoffLimit: 4

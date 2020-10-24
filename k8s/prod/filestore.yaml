@@ -5,7 +5,7 @@ items:
 - apiVersion: v1
   kind: PersistentVolume
   metadata:
-   name: tfwiki-media-dev
+   name: tfwiki-media-prod
   spec:
    capacity:
      storage: 1T
@@ -17,13 +17,13 @@ items:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: tfwiki-media-dev-claim
-    namespace: tfwiki-dev
+    name: tfwiki-media-prod-claim
+    namespace: default
   spec:
     accessModes:
     - ReadWriteMany
     storageClassName: ""
-    volumeName: tfwiki-media-dev
+    volumeName: tfwiki-media-prod
     resources:
       requests:
         storage: 1T

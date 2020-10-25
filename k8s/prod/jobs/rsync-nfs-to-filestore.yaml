@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: rsync-nfs-to-filestore-20201024
+  name: rsync-nfs-to-filestore-20201025
   namespace: default
 spec:
   template:

@@ -159,9 +159,10 @@ spec:
         volumeMounts:
           - name: mediawiki-images
             mountPath: /var/www/html/w/images
+            subPath: prod
       volumes:
         - name: mediawiki-images
           persistentVolumeClaim:
-            claimName: nfs
+            claimName: tfwiki-media-prod-claim
       restartPolicy: Never
   backoffLimit: 4

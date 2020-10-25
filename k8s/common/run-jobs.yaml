@@ -186,6 +186,7 @@ spec:
         volumeMounts:
         - mountPath: /var/www/html/w/images
           name: mediawiki-images
+          subPath: prod
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -194,5 +195,5 @@ spec:
       volumes:
       - name: mediawiki-images
         persistentVolumeClaim:
-          claimName: nfs
+          claimName: tfwiki-media-prod-claim
 status: {}

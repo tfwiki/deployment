@@ -29,7 +29,7 @@ items:
     namespace: default
   spec:
     maxReplicas: 18
-    minReplicas: 2
+    minReplicas: 3
     scaleTargetRef:
       apiVersion: apps/v1beta1
       kind: Deployment

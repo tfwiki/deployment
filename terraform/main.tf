@@ -18,8 +18,8 @@ module "gke-cluster" {
   env_label    = var.env_label
 }
 
-# module "kubernetes-config" {
-#   depends_on       = [module.gke-cluster]
-#   source           = "./kubernetes-config"
-#   cluster_name     = var.cluster_name
-# }
+module "kubernetes-config" {
+  depends_on       = [module.gke-cluster]
+  source           = "./kubernetes-config"
+  cluster_name     = var.cluster_name
+}

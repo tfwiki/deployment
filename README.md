@@ -4,15 +4,21 @@ This repository contains the non-sensitive Kubernetes declarations powering the 
 
 Secrets and credentials are managed separately in a Blackbox repository: [tfwiki/secrets](https://github.com/tfwiki/secrets)
 
+> **Warning**
+> We are migrating away from managing Kubernetes resources directly via manifest files (fiddly and error-prone) to managing them via Terraform.
+>
+> See the [terraform](./terraform) folder for progress on this migration
+
 Rough notes:
 
-### Prerequisites
-* Kubernetes cluster running 1.8.x (to avoid hardcoding NFS Service IP in PersistantVolume declaration)
-* Cloud SQL database `cloudsql-instance-credentials` https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine
-* Persistant disk for mediawiki images (mounted via NFS)
-* Global Static IP address
+## Prerequisites
 
-### Task list
+- Kubernetes cluster running 1.8.x (to avoid hardcoding NFS Service IP in PersistantVolume declaration)
+- Cloud SQL database `cloudsql-instance-credentials` <https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine>
+- Persistant disk for mediawiki images (mounted via NFS)
+- Global Static IP address
+
+## Task list
 
 1. Create cluster in Google Container Engine
 2. Work on correct zone (`gcloud config set compute/zone [COMPUTE-ZONE]`)
@@ -26,6 +32,6 @@ Rough notes:
 
 Syncing files from the Valve-hosted wiki is managed via the [`media-sync`](k8s/common/media-sync.yaml) job, but needs authorised SSH keys stored within a Kubernetes secret:
 
-```
+```sh
 kubectl create secret generic media-sync-secret --from-file=ssh-privatekey=/path/to/.ssh/id_rsa --from-file=ssh-publickey=/path/to/.ssh/id_rsa.pub
 ```

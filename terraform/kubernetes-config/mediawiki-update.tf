@@ -1,4 +1,8 @@
 resource "kubernetes_job" "mediawiki_update" {
+  # TODO: Create these per update, organised another way? Perhaps a `jobs/[whatever].tf`?
+  # How to avoid re-run if setting infra up from scratch, where jobs aren't relevant?
+  count = 0
+
   metadata {
     name = "mediawiki-update"
 

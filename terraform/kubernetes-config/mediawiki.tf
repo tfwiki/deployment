@@ -41,7 +41,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "mediawiki" {
       api_version = "apps/v1beta1"
     }
 
-    min_replicas                      = 3
+    min_replicas                      = 6
     max_replicas                      = 18
     target_cpu_utilization_percentage = 80
   }
@@ -57,8 +57,6 @@ resource "kubernetes_deployment" "mediawiki" {
   }
 
   spec {
-    replicas = 8
-
     selector {
       match_labels = {
         app = "mediawiki"

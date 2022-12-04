@@ -32,10 +32,6 @@ resource "kubernetes_daemonset" "cloudsql_proxy" {
     labels = {
       app = "cloudsql-proxy"
     }
-
-    annotations = {
-      "deprecated.daemonset.template.generation" = "0"
-    }
   }
 
   spec {

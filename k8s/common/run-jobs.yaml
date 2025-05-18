@@ -6,9 +6,9 @@ metadata:
     app: run-jobs
   name: run-jobs
 spec:
-  progressDeadlineSeconds: 2147483647
+  progressDeadlineSeconds: 600
   replicas: 4
-  revisionHistoryLimit: 2147483647
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       app: run-jobs

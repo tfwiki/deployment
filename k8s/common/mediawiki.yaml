@@ -28,13 +28,13 @@ items:
     name: mediawiki
     namespace: default
   spec:
-    maxReplicas: 18
-    minReplicas: 3
+    maxReplicas: 24
+    minReplicas: 12
     scaleTargetRef:
-      apiVersion: apps/v1beta1
+      apiVersion: apps/v1
       kind: Deployment
       name: mediawiki
-    targetCPUUtilizationPercentage: 80
+    targetCPUUtilizationPercentage: 60
   status:
     currentReplicas: 0
     desiredReplicas: 0
@@ -46,9 +46,9 @@ items:
       app: mediawiki
     name: mediawiki
   spec:
-    progressDeadlineSeconds: 2147483647
-    replicas: 8
-    revisionHistoryLimit: 2147483647
+    progressDeadlineSeconds: 600
+    replicas: 12
+    revisionHistoryLimit: 10
     selector:
       matchLabels:
         app: mediawiki
@@ -65,6 +65,7 @@ items:
           app: mediawiki
           tier: frontend
       spec:
+        automountServiceAccountToken: true
         containers:
         - env:
           # - name: READ_ONLY_MESSAGE
@@ -80,6 +81,7 @@ items:
               configMapKeyRef:
                 key: server_url
                 name: mediawiki-config
+                optional: false
           - name: SITENAME
             valueFrom:
               configMapKeyRef:
@@ -109,11 +111,13 @@ items:
               secretKeyRef:
                 key: recaptcha.key
                 name: mediawiki-secret
+                optional: false
           - name: RECAPTCHA_SECRET
             valueFrom:
               secretKeyRef:
                 key: recaptcha.secret
                 name: mediawiki-secret
+                optional: false
           - name: EMAIL_EMERGENCY_CONTACT
             valueFrom:
               secretKeyRef:
@@ -173,6 +177,7 @@ items:
               secretKeyRef:
                 key: secret_key
                 name: mediawiki-secret
+                optional: false
           - name: STEAM_API_KEY
             valueFrom:
               secretKeyRef:
@@ -212,45 +217,48 @@ items:
           image: tfwiki/mediawiki:1.31-tfwiki6
           imagePullPolicy: Always
           livenessProbe:
-            failureThreshold: 6
+            failureThreshold: 15
             httpGet:
               path: /wiki/Main_Page
               port: 80
               scheme: HTTP
-            periodSeconds: 10
+            periodSeconds: 120
             successThreshold: 1
-            timeoutSeconds: 5
+            timeoutSeconds: 15
           name: mediawiki
           ports:
           - containerPort: 80
             name: mediawiki
             protocol: TCP
           readinessProbe:
-            failureThreshold: 3
+            failureThreshold: 15
             httpGet:
               path: /wiki/Main_Page
               port: 80
               scheme: HTTP
-            periodSeconds: 10
+            periodSeconds: 120
             successThreshold: 1
-            timeoutSeconds: 5
+            timeoutSeconds: 15
           resources:
             limits:
               cpu: "10"
               memory: 6Gi
             requests:
               cpu: "8"
-              memory: 5Gi
+              memory: 4Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
           - mountPath: /var/www/html/w/images
+            mountPropagation: None
             name: mediawiki-images
             subPath: prod
         dnsPolicy: ClusterFirst
+        enableServiceLinks: true
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
+        shareProcessNamespace: false
         terminationGracePeriodSeconds: 30
         volumes:
         - name: mediawiki-images

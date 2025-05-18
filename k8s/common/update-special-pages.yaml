@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   creationTimestamp: null
@@ -6,7 +6,7 @@ metadata:
     app: update-special-pages
   name: update-special-pages
 spec:
-  concurrencyPolicy: Allow
+  concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
   jobTemplate:
     metadata:
@@ -182,7 +182,7 @@ spec:
           - name: mediawiki-images
             persistentVolumeClaim:
               claimName: tfwiki-media-prod-claim
-  schedule: 0 * * * *
+  schedule: 0 */2 * * *
   successfulJobsHistoryLimit: 3
   suspend: false
 status: {}
